@@ -7,6 +7,12 @@
 #
 # Several settings can also be changed while playing, from the settings menu (L+R).
 
+# --- Controller -----------------------------------------------------------------------------------
+# Face buttons. false: each Switch button acts as the Xbox 360 button with the same letter, so A
+# accepts and B goes back, as in other Switch games. true: by position, as on an Xbox pad (B acts as
+# A, A as B, Y as X and X as Y), as in 1.0.0. The settings menu (L+R) uses the same buttons.
+input_xbox_layout = false
+
 # --- Swap interval --------------------------------------------------------------------------------
 # Keep it at 0. The swapchain is created in IMMEDIATE mode (interval 0), which does not tear on
 # Horizon: the system compositor still composes at 60 Hz and the game never scans out directly. The
@@ -22,11 +28,16 @@ nfsmw_intervalo_swap = 0
 # you get closer, lower it to 125.
 nfsmw_sombras_corte = 150
 
-nfsmw_nativo_texturas_mb_max = 384
-# Resolution the scene is resolved to. The game draws the scene at 1280x720 either way; this only
-# shrinks the image when it is resolved, which makes post-processing and copies cheaper (1280x720
-# costs about 3.7 ms more GPU time per frame). Do not use "automatico": docked it would pick 1920x1080.
-nfsmw_resolucion_interna = "1024x576"
+# Texture cache limit in MB: above it, the textures unused for the longest time are released. 512
+# leaves room for the larger render targets at 1920x1080. With 384 the cache came close to the limit
+# in races even at 1024x576, and releasing textures to upload them again causes stutters.
+nfsmw_nativo_texturas_mb_max = 512
+# Resolution. "automatico": 1280x720 if the game starts in handheld mode and 1920x1080 if it starts
+# docked (or with ReverseNX-RT's Fake Docked). It is chosen when the game starts: after docking or
+# undocking, restart the game to change it. "1280x720" or "1920x1080" use that resolution in both
+# modes. 1024x576, 640x360 and 640x480 only shrink the image after it is drawn at 1280x720, so they
+# do not raise the frame rate.
+nfsmw_resolucion_interna = "automatico"
 nfsmw_sombras_sin_vegetacion = true
 # No radial blur on the final image. With the blur and the 9-sample shadow filter, the GPU time of a
 # race frame went from 25.1 to 27.3 ms.
