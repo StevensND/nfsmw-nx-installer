@@ -81,10 +81,9 @@ self.onmessage = async ({ data }) => {
         : t('notSupportedYet', { hash: xexHash }));
     }
     log(t('downloadingBuild', { edition: editionName(build.edition) }));
-    const [nro, toml, licenses, shaderCommon] = await Promise.all([
+    const [nro, toml, shaderCommon] = await Promise.all([
       fetchBytes(programPath(build)),
       fetchBytes('./release/nfsmw.toml'),
-      fetchBytes('./release/LICENSES.txt'),
       fetchBytes('./shader_common.h'),
     ]);
     const nroHash = [...new Uint8Array(await crypto.subtle.digest('SHA-256', nro))]
@@ -100,7 +99,7 @@ self.onmessage = async ({ data }) => {
       pack: await createPackModule(quiet()),
       lzx: await createLzxModule(quiet()),
     };
-    const result = await createPackage(files, { manifest, nro, toml, licenses, shaderCommon }, modules, sink, log, progress,
+    const result = await createPackage(files, { manifest, nro, toml, shaderCommon }, modules, sink, log, progress,
       (size) => postMessage({ type: 'size', size }), { update: Boolean(data.update) });
     postMessage({ type: 'done', result });
   } catch (error) {

@@ -15,5 +15,5 @@ libmspack sources (`lzxd.c` and `system.c`, at the commit pinned by ReXGlue SDK 
 the NFSMW-NX repository, with `shaders/wasm/build_wasm_tools.bat`; with those sources it can be rebuilt and replaced
 by a modified version.
 
-The licenses of the software inside the package (the NRO and its libraries) are in `release/LICENSES.txt`, which is
-also copied into every zip.
+The licenses of the software inside the package (the NRO and its libraries) are in `release/LICENSES.txt`, and the
+source code with its license is at https://github.com/StevensND/nfsmw-nx.

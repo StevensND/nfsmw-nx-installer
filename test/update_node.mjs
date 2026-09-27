@@ -1,5 +1,5 @@
 // Builds nfsmw-nx-update.zip in Node from an ISO, with the same code the page runs, and checks what is inside:
-// only the program, its settings, the licenses and the shaders, each one the file the list of builds names.
+// only the program, its settings and the shaders, each one the file the list of builds names.
 // Usage: node update_node.mjs <iso> <output zip>
 import fs from 'node:fs';
 import path from 'node:path';
@@ -47,7 +47,6 @@ const release = {
   manifest,
   nro: new Uint8Array(fs.readFileSync(path.join(root, 'release', build.nro))),
   toml: new Uint8Array(fs.readFileSync(path.join(root, 'release/nfsmw.toml'))),
-  licenses: new Uint8Array(fs.readFileSync(path.join(root, 'release/LICENSES.txt'))),
   shaderCommon: new Uint8Array(fs.readFileSync(path.join(root, 'shader_common.h'))),
 };
 const out = fs.openSync(output, 'w');
@@ -84,7 +83,6 @@ for (let i = 0; i < count; i++) {
 const expected = {
   'nfsmw-nx/nfsmw-nx.nro': build.nro_sha256,
   'nfsmw-nx/nfsmw.toml': sha(release.toml),
-  'nfsmw-nx/LICENSES.txt': sha(release.licenses),
   'nfsmw-nx/nfsmw_shaders.nfsp': build.library_sha256,
 };
 const wrong = Object.keys(expected).filter((name) => entries[name] !== expected[name]);
@@ -93,4 +91,4 @@ console.log(`${build.edition}: ${count} entries, ${zip.length} bytes, ${seconds}
 if (wrong.length || extra.length) {
   throw new Error(`wrong: ${wrong.join(', ') || 'none'}; unexpected: ${extra.join(', ') || 'none'}`);
 }
-console.log('the update package holds exactly the program, the settings, the licenses and the shaders of the list of builds');
+console.log('the update package holds exactly the program, the settings and the shaders of the list of builds');

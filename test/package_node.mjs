@@ -43,7 +43,6 @@ const release = {
   manifest,
   nro: new Uint8Array(fs.readFileSync(path.join(root, 'release', build.nro))),
   toml: new Uint8Array(fs.readFileSync(path.join(root, 'release/nfsmw.toml'))),
-  licenses: new Uint8Array(fs.readFileSync(path.join(root, 'release/LICENSES.txt'))),
   shaderCommon: new Uint8Array(fs.readFileSync(path.join(root, 'shader_common.h'))),
 };
 const out = fs.openSync(output, 'w');

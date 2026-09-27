@@ -33,7 +33,6 @@ const PAGE_FILES = [
   'wasm/pack.wasm',
   'release/manifest.json',
   'release/nfsmw.toml',
-  'release/LICENSES.txt',
 ];
 // How long a page file waits for the network before the kept copy is used (the network still refreshes it).
 const NETWORK_WAIT = 4000;

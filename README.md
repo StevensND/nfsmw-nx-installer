@@ -30,7 +30,7 @@ connection.
 | `sw.js` | Offline cache and the download stream |
 | `lib/` | ISO and XEX readers, shader container scanner, shader library, zip writer |
 | `wasm/` | WebAssembly builds of the shader translator, DXC, the library packer and the LZX decoder |
-| `release/` | The list of builds, the configuration file and the licenses that go into the zip |
+| `release/` | The list of builds, the configuration file that goes into the zip, and the licenses of the NRO |
 | `test/` | Node scripts that run the same code as the page |
 
 The WebAssembly modules are built from `shaders/` of the source repository (`shaders/wasm/build_wasm_tools.bat` and
