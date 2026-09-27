@@ -1,0 +1,56 @@
+name: Deploy to GitHub Pages
+
+# The NROs are not in this repository: they are assets of a release of StevensND/nfsmw-nx. Each deployment
+# downloads them into release/, checks them against release/manifest.json and publishes the page with them.
+# Run it by hand (Actions > Deploy to GitHub Pages > Run workflow) after publishing a new release there.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Release of StevensND/nfsmw-nx to take the NROs from (empty for the latest)
+        required: false
+        default: ''
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Download the NROs of the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.tag }}
+        run: gh release download $TAG --repo StevensND/nfsmw-nx --pattern '*.nro' --dir release --clobber
+
+      - name: Check them against the list of builds
+        run: node .github/verify_release.mjs
+
+      - name: Assemble the site
+        run: |
+          mkdir _site
+          cp -r index.html app.js worker.js sw.js background.webp shader_common.h fonts lib wasm release _site/
+
+      - uses: actions/configure-pages@v5
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+      - id: deployment
+        uses: actions/deploy-pages@v4

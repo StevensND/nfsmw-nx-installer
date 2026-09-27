@@ -1,0 +1,430 @@
+﻿# nfsmw.toml - settings of NFSMW-NX for the Nintendo Switch.
+#
+# ==================================================================================================
+#  Every line here overrides the default value built into the program. These are the tested values:
+#  change one only to try something, and delete the line to go back to the program's default.
+# ==================================================================================================
+#
+# Several settings can also be changed while playing, from the settings menu (L+R).
+
+# --- Swap interval --------------------------------------------------------------------------------
+# Keep it at 0. The swapchain is created in IMMEDIATE mode (interval 0), which does not tear on
+# Horizon: the system compositor still composes at 60 Hz and the game never scans out directly. The
+# only effect is that the recording thread is not blocked inside the presentation, which otherwise
+# left the GPU idle for several milliseconds per frame. This setting is applied again at every
+# presentation, so a 1 here would override the swapchain mode on the first frame.
+nfsmw_intervalo_swap = 0
+
+# --- Shadow distance ------------------------------------------------------------------------------
+# The shadow pass costs about 0.56 ms per 10,000 triangles: it is almost pure geometry. In percent:
+# 100 = the game's distance, 150 shortens to two thirds the distance at which an object stops casting
+# a shadow. Small, distant objects lose their shadow; near ones are not affected. If shadows pop in as
+# you get closer, lower it to 125.
+nfsmw_sombras_corte = 150
+
+nfsmw_nativo_texturas_mb_max = 384
+# Resolution the scene is resolved to. The game draws the scene at 1280x720 either way; this only
+# shrinks the image when it is resolved, which makes post-processing and copies cheaper (1280x720
+# costs about 3.7 ms more GPU time per frame). Do not use "automatico": docked it would pick 1920x1080.
+nfsmw_resolucion_interna = "1024x576"
+nfsmw_sombras_sin_vegetacion = true
+# No radial blur on the final image. With the blur and the 9-sample shadow filter, the GPU time of a
+# race frame went from 25.1 to 27.3 ms.
+nfsmw_nativo_sin_desenfoque = true
+nfsmw_retrovisor_recorte = true
+nfsmw_nativo_pase_area_util = true
+nfsmw_nativo_intercambiar_sin_borrado = true
+nfsmw_nativo_intercambiar_color = false
+nfsmw_nativo_pase_sombras_sin_load = true
+nfsmw_cubemap_caras_max = 6
+nfsmw_guardia_30 = false
+nfsmw_guardia_30_presupuesto_us = 31000
+nfsmw_nativo_enviar_tras_sombras = false
+nfsmw_sombras_mapas = 1
+nfsmw_sombras_cada = 1
+nfsmw_nativo_omitir_sombras = false
+nfsmw_limite_fps = "60"
+# One sample of the shadow map instead of a 3x3 filter. The 9 samples only cost GPU time: the grid
+# pattern on doors was shadow acne, which nfsmw_nativo_sombras_sesgo_pendiente removes.
+nfsmw_nativo_pcf_barato = true
+nfsmw_nativo_pcf_barato_alternar_s = 0
+nfsmw_nativo_zcull = true
+nfsmw_nativo_sombras_escala = 100
+nfsmw_nativo_marcas_precisas = true
+nfsmw_renderizador = "nativo"
+nfsmw_resplandor_cielo = "natural"
+nfsmw_switch_relojes_reverse = true
+nfsmw_nativo_inv_tamano_tex_alternar_s = 0
+nfsmw_switch_nvmap_mb = 32
+
+# --- Presentation ---------------------------------------------------------------------------------
+
+# A presentation thread of its own: off. It raised the average frame rate slightly but made stutters
+# about three times more frequent.
+present_hilo_propio = false
+vulkan_allow_present_mode_immediate = true
+
+# Timing of the presentation in 12 parts, in the log (14 clock reads per frame, about 1.4 us).
+present_perfil_pintado = true
+
+# Reduced meshes in the shadow map: off. It only affects the scenery (0.6 % of the shadow map) and
+# raises the size under which objects are skipped from 18 to 32 pixels, so it only removes shadows.
+nfsmw_sombras_lod = false
+
+# Depth test before shading for draws that test depth but do not write it.
+# nfsmw_nativo_z_temprana_alternar_s = 30 alternates it every 30 s for an A/B measurement.
+nfsmw_nativo_z_temprana = true
+nfsmw_nativo_z_temprana_alternar_s = 0
+nfsmw_nativo_saltar_invisibles = true
+
+# Minimum detail of the faces of the car's environment cubemap (the game uses 4 in every view, even
+# on a 256x256 face). 0 = as the game.
+nfsmw_cubemap_detalle_minimo = 16
+
+# The same for the visible scene. 0 = as the game: raising it makes small objects pop in as you get
+# closer.
+nfsmw_escena_detalle_minimo = 0
+
+# Restauraciones y borrados
+nfsmw_nativo_restaurar_area_util = true
+nfsmw_nativo_saltar_borrados_repetidos = true
+# Restore render targets by swapping images instead of copying them: off. It would save about 2 ms
+# of GPU per frame, but the shadow map the car body samples stayed on an old image, and the car had
+# no shadow under bridges.
+nfsmw_nativo_restaurar_por_intercambio = false
+
+# File reads: read-ahead window and warnings for slow reads. Only for the game's read-only files;
+# saves are not affected.
+nfsmw_io_ventana_kb = 64
+nfsmw_io_ventanas_max = 128
+nfsmw_io_aviso_ms = 8
+nfsmw_io_resumen_s = 15
+
+
+
+# Fragments per pixel shader, measured every N seconds (0 = off). Each measurement makes one GPU
+# query per draw during a frame, which causes a stutter of about 70 ms.
+nfsmw_nativo_estadisticas_por_dibujo_s = 0
+
+# Environment variables for Mesa/NVK, set before Vulkan starts: "VAR=value;VAR=value" (see
+# mesa/README.md in the source repository). Empty = the driver's defaults.
+#
+nfsmw_mesa_entorno = ""
+
+# ============================================================================
+# Scenery detail, texture memory and the SD card read cache.
+# ============================================================================
+
+# Scenery level of detail, in world units the switch to the full mesh is brought forward. The game
+# switches while the object still covers a large part of the screen. 0 = as the game; 150 = the full
+# mesh comes in 150 units earlier; -1 = always the full mesh.
+nfsmw_escenario_detalle = 0
+
+# Texture memory from a pool: allocating memory for each texture costs 1.9 ms of CPU, 0.75 ms with
+# the pool. false if textures ever look corrupted.
+nfsmw_nativo_texturas_pool = true
+nfsmw_nativo_texturas_pool_slab_mb = 16
+
+# Texture and sampler caches kept between frames. false if the HUD ever looks blurry or late.
+nfsmw_nativo_cache_texturas_entre_fotogramas = true
+
+# Cache of the large SD card reads the game repeats on every lap (MB). Do not go below 32: the three
+# reads that matter would not fit.
+nfsmw_io_rangos_mb = 64
+nfsmw_io_rangos_min_mb = 0
+# Smallest read that is cached, in KB (the reads repeated during a race are 0.14-2.0 MB).
+nfsmw_io_rangos_min_kb = 256
+nfsmw_io_rangos_max_mb = 12
+
+# ============================================================================
+# Streaming look-ahead. The game requests the next world sections 1.5 s or 100 m ahead, whichever
+# is less: at 25 m/s that is 37.5 m, and the detailed section arrives when the building is already
+# on screen (pop-in and a stutter, the same event). 250 % looks about 94 m ahead, capped by
+# nfsmw_streaming_techo_m. Higher values keep more sections loaded, with more SD card reads.
+# 100 = the game's own behavior.
+# ============================================================================
+nfsmw_streaming_anticipacion = 250
+nfsmw_streaming_techo_m = 160
+nfsmw_streaming_diag = true
+
+# ============================================================================
+# --- Compilacion 144 ---
+# ============================================================================
+
+# Frame slots for recording. Do not change it: there are 3 output slots, fixed in the code
+# (kRanurasSalida), and more work slots would reuse an image that is still on screen.
+nfsmw_nativo_ranuras_trabajo = 3
+
+# ============================================================================
+# The sky dome drawn after the opaque scene: 3.4-4.3 ms of GPU time with the same image.
+#
+# The game draws the dome first, on an empty depth buffer: 0.83 M fragments (90 % of the screen)
+# that the world then covers almost entirely. Drawn after the opaque objects, the depth test
+# rejects exactly the pixels that were being overwritten. It checks itself: for the first 90
+# frames with a sky it only counts domes, it enables itself only if there was always exactly one
+# per frame, and it turns off for the session if two ever appear in the same frame.
+# In rex_perfil.log, line "C6 cielo": GUARDIA: SUPERADA / DESCARTADA / mirando.
+#
+# If you ever see a stray flash, flicker or a wrong color in the sky, set it to false.
+# ============================================================================
+nfsmw_nativo_cielo_aplazado = true
+
+present_refresco_sellado_perezoso = false
+
+# ============================================================================
+# GPU clock in handheld mode: 460.8 MHz. This is an official performance configuration of the
+# system (apm), not an overclock: no KIP or sysmodule is involved. It gives 50 % more GPU and costs
+# battery and heat. Memory stays at 1331.2 MHz (configuration 0x92220008); the program checks it for
+# 1.5 s after setting it.
+#
+# 0 = 307.2 MHz (the default handheld clock). 384 = the intermediate step.
+# ============================================================================
+nfsmw_switch_gpu_mhz = 460
+
+# ============================================================================
+# If the firmware has no configuration with the GPU at 460.8 MHz and memory at 1331.2 MHz
+# (0x92220008), the GPU stays at 307.2 MHz rather than raising the memory clock; the log says so.
+# true accepts the other configuration instead: GPU at 460.8 MHz with memory at 1600 MHz
+# (0x92220007).
+# ============================================================================
+nfsmw_switch_ram_1600 = false
+
+# ============================================================================
+# Core of the ring thread. -1 = the default cores of the process, the best option.
+#
+# A preferred core (0-2) is accepted by the kernel, but the thread still moves between cores.
+# Pinning it to that core only (nfsmw_nativo_anillo_nucleo_exclusivo) does keep it there, and makes
+# the game worse: the lowest frame rate went from 21.0 to 16.3 FPS. Moving between cores costs
+# almost nothing (44 migrations per second, about 0.05 % of a core).
+# ============================================================================
+nfsmw_nativo_anillo_nucleo = -1
+
+# Pin the ring thread to that core only: off (see above).
+nfsmw_nativo_anillo_nucleo_exclusivo = false
+
+# ============================================================================
+# Priority of the two threads that hand frames over to each other (the one that prepares a frame
+# and Main XThread, which runs it): 0x3A instead of the game's 0x3B, so they do not wait a 10 ms
+# time slice behind another game thread when they wake up (a 1 ms wait could last 17 ms).
+# 58 = 0x3A. 0 = leave them at the game's priority.
+# ============================================================================
+nfsmw_relevo_prioridad = 58
+
+# ============================================================================
+# Game functions in native code. Most of them check themselves against the original and turn off
+# if they ever differ; false = the original function.
+#
+# The function that prepares the commands of each draw (sub_825A2AA0): a direct copy instead of
+# 15-20 instructions per word, identical bit for bit.
+# ============================================================================
+nfsmw_d3d_registros_nativo = true
+
+# Effect parameters (sub_826992F0), floating point constants. Checked against the original on the
+# first 256 calls.
+nfsmw_d3d_efectos_nativo = true
+
+# Shared constants of each draw in a separate, CPU-cached buffer (the rest of the upload buffer is
+# uncached): 0.4 us per draw instead of 2.0.
+nfsmw_nativo_compartidas_cache = true
+
+# Each state dump of the game's Direct3D (FlushState) goes to the ring as one marker packet instead
+# of about 14. Checked on 20,000 cases before it is used.
+nfsmw_d3d_marcador = true
+
+# Material parameters (sub_824511E8 and the five functions that write them). Checked on 50,000
+# calls, then on 1 in 4,096.
+nfsmw_material_nativo = true
+# Effect parameters (sub_826992F0), the rest: integers, booleans and textures.
+nfsmw_d3d_efectos_nativo_todo = true
+
+# Raindrops on the screen, as on the Xbox 360. The game draws them with an internal Direct3D
+# routine the renderer did not follow before. false = no raindrops.
+nfsmw_nativo_gotas_lluvia = true
+
+# Object visibility (eViewPlatInterface::GetVisibleState, sub_8243E7D8). Checked on 200,000 calls,
+# then on 1 in 4,096.
+nfsmw_visible_nativo = true
+
+# Per-draw matrices (sub_824538D0) and eViewPlatInterface::Render (sub_8243E358).
+nfsmw_matrices_nativo = true
+nfsmw_eview_nativo = true
+
+# The record of each draw (its shaders) travels inside the marker, so the ring does not look it up
+# in the queue. Checked on 20,000 cases before it is used.
+nfsmw_d3d_marcador_registro = true
+
+# --- Ring thread ----------------------------------------------------------------------------------
+# Less work per draw on the ring thread, and fewer stutters. Each change checks itself (DIFERENCIA
+# in the log means it turned itself off); false = as before, one by one:
+# - reports written from another thread (each report cost the ring 29-32 ms every 20 s), also for
+#   the periodic lines of audio, engine sound, Direct3D state and render cuts
+nfsmw_nativo_informes_diferidos = true
+# - no vkCmdBindVertexBuffers for draws with a single binding (false if anything looks stretched)
+nfsmw_nativo_vertices_base_cero = true
+# - direct pipeline cache, cached viewport, pass key without XXH3 and remembered useful height
+nfsmw_nativo_pipelines_directa = true
+nfsmw_nativo_encuadre_cache = true
+nfsmw_nativo_clave_pase_rapida = true
+nfsmw_nativo_alto_util_memo = true
+nfsmw_nativo_cvars_por_fotograma = true
+# Anisotropic filtering: 0 as on the Xbox 360 (8 did not remove the stripes on doors and cost GPU time).
+nfsmw_nativo_anisotropico = 0
+
+# Diagnostic: 1, 2 or 3 makes textures use a smaller mip level even up close (everything looks
+# blurry). It can be changed while playing from the settings menu (category NFSMW). Leave it at 0.
+nfsmw_nativo_diag_mip_minimo = 0
+
+# Depth bias of the shadow map: removes shadow acne (the grid of dots and diagonal stripes on
+# garage doors and walls). Slope in tenths (20 = 2.0), constant in thousands of units. Both can be
+# changed while playing from the menu (L+R+Right, category NFSMW). Too high and shadows come off
+# their objects. 0 and 0 = the game's own bias.
+nfsmw_nativo_sombras_sesgo_pendiente = 20
+nfsmw_nativo_sombras_sesgo_constante = 0
+
+# ============================================================================
+# Each of these checks itself: if something does not match, it writes DIFERENCIA in the log and
+# turns itself off for the session. false = as before, one by one.
+# ============================================================================
+# GPU: the depth that only the blur used is not copied (about 0.35 ms), even when the game rewrites
+# the source in the same frame
+nfsmw_nativo_profundidad_perezosa = true
+# GPU: the final image is drawn without copying it first (about 0.35 ms)
+nfsmw_nativo_frontal_perezoso = true
+# GPU: copy the composed scene only when raindrops read it: off, because a draw reads it almost
+# every frame. Needs nfsmw_nativo_diag_lectores_s.
+nfsmw_nativo_compuesta_perezosa = false
+# Tracking of which draws read each render target (only used by the setting above)
+nfsmw_nativo_diag_lectores_s = 0
+# GPU: clear only the used area of color targets: off. It saved 0.09 ms of GPU and its bookkeeping
+# runs on the ring thread.
+nfsmw_nativo_borrar_area_util = false
+# Diagnostic of the clears
+nfsmw_nativo_diag_borrados = false
+# GPU: the car shadows take the minimum of two shadow maps instead of copying the 1600x1600 one
+# (about 0.9-1.25 ms). Needs the one-sample shadow filter (nfsmw_nativo_pcf_barato = true).
+nfsmw_nativo_sombra_minimo = true
+nfsmw_nativo_sombra_minimo_alternar_s = 0
+# Ring: vegetation is left out of the shadow map inside the game code (about 1 ms of ring thread
+# and 0.4-0.9 ms of game thread)
+nfsmw_d3d_vegetacion_juego = true
+# Ring: shader microcode is not compared in full on every load (about 0.25-0.5 ms)
+nfsmw_nativo_im_load_sin_memcmp = true
+# Ring: exact cache of immediate shader loads (0.15-0.6 ms where they are frequent)
+nfsmw_nativo_im_inmediato_cache = true
+# Ring (patched NVK): descriptor set 4 written as a difference against the previous draw (about
+# 0.5-1.2 ms). Its check in the driver compared 386,271 constant buffers without a difference, and
+# draws rebind 38-45 % fewer constant buffers.
+nfsmw_nativo_set4_diferencias = true
+nfsmw_nativo_set4_diferencias_alternar_s = 0
+# Ring: pipeline changes. The canonical key and extended dynamic state (EDS1/2/3) are off: each bind
+# got slower and few binds were saved. Keeping the pipeline between passes is on.
+nfsmw_nativo_clave_canonica = false
+nfsmw_nativo_pipeline_entre_pases = true
+# Off: each BindPipeline went from 2.95 to 4.36 us, about 1 ms more of ring time per frame.
+nfsmw_nativo_estado_dinamico = false
+# Goes with the one above.
+nfsmw_nativo_estado_dinamico3 = false
+# Counting of pipeline changes (diagnostic).
+nfsmw_nativo_contar_cambios_pipeline = false
+# Stutters when entering a new area: new textures are bound to memory on a separate thread
+nfsmw_nativo_texturas_enlace_hilo = true
+nfsmw_nativo_texturas_enlace_hilo_prioridad = 45
+# Thread that prepares the frame: DrawAScenery (culling and level of detail of the scenery) in
+# native code, identical bit for bit (about 0.55-0.9 ms)
+nfsmw_escenario_nativo = true
+# Robustness: the framebuffer cache forgets destroyed image views
+nfsmw_nativo_framebuffers_olvidan_vistas = true
+
+# ============================================================================
+# Stutters: the ring thread copies the vertices the copy thread has not started yet, instead of
+# waiting for it (the copy thread runs below the game's priority). Checked. false = wait.
+# ============================================================================
+nfsmw_nativo_subidas_ayuda = true
+# Fingerprint and untiling of new textures on a separate thread: off. Its check tripped at startup,
+# and textures are not what causes stutters in races.
+nfsmw_nativo_texturas_huella_hilo = false
+# Game thread: the start of an effect pass (sub_82448E80) in native code (0.2-0.45 ms). Checked
+# against a literal copy of the original.
+nfsmw_efecto_pasada_nativo = true
+
+# ============================================================================
+# Pipeline prewarming. A pipeline compiled during play costs 70-160 ms, a stutter. At startup a
+# thread at the lowest priority compiles the pipelines of earlier sessions into the Vulkan cache
+# (nfsmw_nativo_pipelines_lista.bin, next to the NRO, written automatically).
+# false = no prewarming (the list is still saved).
+# ============================================================================
+nfsmw_nativo_pipelines_precalentar = true
+
+# Measurement only: counts new textures with the same content and shape as one still in the cache
+# (the game reloads its packs at other addresses). Changes nothing. false = no counting.
+nfsmw_nativo_diag_reutilizar = true
+
+# Ring (patched NVK): a cheaper path for each draw inside the driver, with the same bytes sent to
+# the GPU. Each change checks itself against the usual path and turns off if they differ
+# (DIFERENCIA in the log). About 1.1-2.8 ms of ring time per frame for the four together.
+# false = as always, one by one:
+# - each draw command written in one go
+nfsmw_nativo_nvk_emision = true
+# - only the constant buffer slots that can get dirty, and no flush when nothing is dirty
+nfsmw_nativo_nvk_cbufs = true
+# - only the dynamic state groups with dirty bits
+nfsmw_nativo_nvk_dinamico = true
+# - cache hints for the pipeline and the shaders before they are used
+nfsmw_nativo_nvk_precarga = true
+# Timing of the parts of a draw inside NVK, on 1 in N calls ("C6 NVK por partes" in the log every
+# 10 s). 0 = off
+nfsmw_nativo_nvk_medir = 64
+nfsmw_nativo_nvk_medir_fallos = false
+nfsmw_nativo_nvk_alternar_s = 0
+
+# Game thread: the code that issues each draw (sub_82452730 and the loop sub_82454B50) in native
+# code, with the cache hints (dcbt) of the original. Checked against a literal copy of the original.
+nfsmw_pegamento_nativo = true
+
+# ============================================================================
+# Ring: 16-bit indices converted with hand-written NEON code; the compiler had stopped vectorizing
+# that loop (about 3 ms of ring time per frame). Checked against the plain loop. false = the loop.
+# ============================================================================
+nfsmw_nativo_indices_neon = true
+# Priority of the vertex copy thread: 0x2E (46). At the game's 0x3B it never got to run and the ring
+# thread did all the copies (about 3 ms per frame). 59 = 0x3B.
+nfsmw_nativo_subidas_hilo_prioridad = 46
+
+# ============================================================================
+# Road reflection (a 640x360 pass): on. The water samples it; without it the sea of Heritage & Omega
+# came out black. About 109 draws per frame. false = no road reflection.
+# ============================================================================
+nfsmw_reflejo_carretera = true
+
+# ============================================================================
+# The black sea was a bug in NVK's shader compiler (NAK), fixed in the driver (mesa/ in the source
+# repository). Old cached shaders are discarded automatically.
+# ============================================================================
+
+# Mesa's own shader cache on the SD card (sdmc:/.mesa): off, it held the same shaders as
+# nfsmw_nativo_pipelines.bin. true = use it too.
+nfsmw_mesa_cache_disco = false
+
+# ============================================================================
+# Road reflection only when something reads it (the water): after 20 frames without reads it is
+# redrawn once every nfsmw_reflejo_refresco frames. false = every frame.
+# ============================================================================
+nfsmw_reflejo_bajo_demanda = true
+nfsmw_reflejo_refresco = 4
+# Preferred core of the vertex copy thread: -2 = one other than the ring thread's (otherwise the ring
+# thread ended up doing the copies, 2.5-5 ms per frame). -1 = no preference.
+nfsmw_nativo_subidas_hilo_nucleo = -2
+
+# ============================================================================
+# With nfsmw_reflejo_bajo_demanda: the reflection is redrawn every frame only if some water is
+# visible on screen (occlusion query); otherwise it was redrawn even when the terrain hid the whole
+# sea. Checked against the final image. false = decide by reads only.
+# ============================================================================
+nfsmw_reflejo_visibilidad = true
+
+# ============================================================================
+# Before resolving a depth target whose contents were swapped away, bring them back. In the main
+# menu the game resolves the shadow map twice in a row, and the scenery sampled the previous frame's
+# map: walls and smoke darkened for a frame while the camera moved. false = do not restore.
+# ============================================================================
+nfsmw_nativo_resolver_contenido_valido = true

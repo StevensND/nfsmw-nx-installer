@@ -1,0 +1,5 @@
+# The NROs are release assets of StevensND/nfsmw-nx; the deployment workflow downloads them.
+release/*.nro
+*.zip
+node_modules/
+__pycache__/
