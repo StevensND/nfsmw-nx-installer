@@ -92,7 +92,8 @@
     /* the link to the source code, between the steps and the icons: nearer the steps, apart from the icons */
     .source { margin: calc(var(--gap) * -.75) 0 calc(var(--gap) * 2.2); text-align: center; font-size: 1.1em; font-weight: 800; font-style: italic;
       text-shadow: 0 1px 8px rgba(0, 0, 0, .8); }
-    .source a { color: #fff; text-decoration: none; }
+    /* the same blue as the links in the text (Sphaira), without the underline until the pointer is over it */
+    .source a { text-decoration: none; }
     .source a[href]:hover, .source a[href]:focus-visible { text-decoration: underline; text-underline-offset: 3px; }
     /* the signature under the links: the text font, bold and italic */
     .signature { margin: calc(var(--gap) * .6) 0 0; text-align: center; color: #d7dde3; font-size: 1em; font-weight: 700; font-style: italic;
