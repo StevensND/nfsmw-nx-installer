@@ -8,7 +8,19 @@
         "NFS/ZZDATA0.BIN": 369948672
       },
       "nro": "nfsmw-nx-pal-es.nro",
-      "nro_sha256": "b2b207eb19d52adf6217f1c67c5aa2b040a197163521d103f58f527d38d3dbc6",
+      "nro_sha256": "3a310ce6ac85070a85d3bca83ef462c3ea64f8cafd9b2091cfb31682203d55e0",
+      "library_sha256": "a27aea2318740f39c4e7fb31167f52a8c2aa4162ee5acc0962a79abaea41a76a",
+      "library_size": 3000968,
+      "blur_container_sha256": "e80cca037bd4becd8a192daa4583e3a3a9281e06436015746583f30701a296f9"
+    },
+    {
+      "edition": "PAL (Spanish)",
+      "xex_sha256": "aad15fc218d034de3131f746e0b763dd8049a40dd676efc87667fcaf4fc72694",
+      "disc": {
+        "NFS/ZZDATA0.BIN": 363659264
+      },
+      "nro": "nfsmw-nx-pal-es.nro",
+      "nro_sha256": "3a310ce6ac85070a85d3bca83ef462c3ea64f8cafd9b2091cfb31682203d55e0",
       "library_sha256": "a27aea2318740f39c4e7fb31167f52a8c2aa4162ee5acc0962a79abaea41a76a",
       "library_size": 3000968,
       "blur_container_sha256": "e80cca037bd4becd8a192daa4583e3a3a9281e06436015746583f30701a296f9"
@@ -20,7 +32,7 @@
         "NFS/ZZDATA0.BIN": 375844864
       },
       "nro": "nfsmw-nx-pal-de.nro",
-      "nro_sha256": "427ed2f03180d7fbb9890c87cac5e3c40c564c548f2a1540d367519b1b2e0744",
+      "nro_sha256": "92424c4865fd9df1483b606b405bac1876785b221907350e8adf4668fe643c31",
       "library_sha256": "bc5be88c34623760d8ade2852878f967500c818603155055f723d59ae8de4d1f",
       "library_size": 3000968,
       "blur_container_sha256": "e80cca037bd4becd8a192daa4583e3a3a9281e06436015746583f30701a296f9"
@@ -32,7 +44,7 @@
         "NFS/ZZDATA0.BIN": 369948672
       },
       "nro": "nfsmw-nx-pal-it.nro",
-      "nro_sha256": "c7ae0ec02d74052d50e08f778483d236aa5b9e9545bef79e26149b1d9787cddb",
+      "nro_sha256": "94295c118d8f4544ac1eb4a9a1195f8093538b181538bbc59837553870858f11",
       "library_sha256": "7b6f7cf155fa8bb8f08bbbd990208a1fb12b638aaba1fcc3b530cc1c08b813e9",
       "library_size": 3000968,
       "blur_container_sha256": "e80cca037bd4becd8a192daa4583e3a3a9281e06436015746583f30701a296f9"
@@ -44,7 +56,7 @@
         "NFS/ZZDATA0.BIN": 381569024
       },
       "nro": "nfsmw-nx-usa.nro",
-      "nro_sha256": "a725a0e7053ab8e3b1152b0cb3d0aec8ee62c9c77a3f62ad1bcb965df5ed4aa4",
+      "nro_sha256": "dc0c1d579d53e0b77f74e79bafaafabd7845d3e387f0299d98edf3786c85898b",
       "library_sha256": "98be11483f9169432b4c97ea34f46b2fc1ee0528a4ff41f08c6cfe7ca013caf0",
       "library_size": 3010284,
       "blur_container_sha256": "e80cca037bd4becd8a192daa4583e3a3a9281e06436015746583f30701a296f9"
@@ -56,7 +68,7 @@
         "NFS/ZZDATA0.BIN": 381569024
       },
       "nro": "nfsmw-nx-pal-en.nro",
-      "nro_sha256": "0ebb1415a3743a91e362d9339401f7f4488acd5ce1055b3eef6463a5d6f2f22d",
+      "nro_sha256": "f82b128aef9d5431d74a6f28fce173a42141c4f6469ffef60ec24deebbb6ac51",
       "library_sha256": "030378f052ea40404f1a1b82b098808f3b842b54d5022309357d6c6acc48643b",
       "library_size": 3014936,
       "blur_container_sha256": "e80cca037bd4becd8a192daa4583e3a3a9281e06436015746583f30701a296f9"
@@ -68,7 +80,7 @@
         "NFS/ZZDATA0.BIN": 387301706
       },
       "nro": "nfsmw-nx-pal-en.nro",
-      "nro_sha256": "0ebb1415a3743a91e362d9339401f7f4488acd5ce1055b3eef6463a5d6f2f22d",
+      "nro_sha256": "f82b128aef9d5431d74a6f28fce173a42141c4f6469ffef60ec24deebbb6ac51",
       "library_sha256": "030378f052ea40404f1a1b82b098808f3b842b54d5022309357d6c6acc48643b",
       "library_size": 3014936,
       "blur_container_sha256": "e80cca037bd4becd8a192daa4583e3a3a9281e06436015746583f30701a296f9"
@@ -80,7 +92,7 @@
         "NFS/ZZDATA0.BIN": 355878912
       },
       "nro": "nfsmw-nx-jpn.nro",
-      "nro_sha256": "f2c50428ceb30fdc98544ad4d04ce4df11e82b6b3299c8996fe5a45ccff96d6a",
+      "nro_sha256": "97f623cdb556cc751c146e95ef55751e73d93889519b3f55e5c8e064f2a5d71f",
       "library_sha256": "07734624578e71ca62ae48692bc0a4e522373c73a79578a1c9530d3d4057c0ff",
       "library_size": 2883744,
       "blur_container_sha256": "9fff34a4ef2514a3d3e512f5f2342061090274af965bc0215e708e2e5736fc8f"

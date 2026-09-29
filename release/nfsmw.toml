@@ -5,13 +5,20 @@
 #  change one only to try something, and delete the line to go back to the program's default.
 # ==================================================================================================
 #
-# Several settings can also be changed while playing, from the settings menu (L+R).
+# Several settings can also be changed while playing, from the Debug Menu (L + R + Right).
 
 # --- Controller -----------------------------------------------------------------------------------
 # Face buttons. false: each Switch button acts as the Xbox 360 button with the same letter, so A
 # accepts and B goes back, as in other Switch games. true: by position, as on an Xbox pad (B acts as
-# A, A as B, Y as X and X as Y), as in 1.0.0. The settings menu (L+R) uses the same buttons.
+# A, A as B, Y as X and X as Y), as in 1.0.0. The Debug Menu uses the same buttons.
 input_xbox_layout = false
+
+# --- Color filter ---------------------------------------------------------------------------------
+# The game's "visual treatment", which players call the "piss filter": the yellow tint, the
+# desaturation and the vignette of the final image. "original": as on the Xbox 360. "suave": half
+# as strong. "apagado": no filter; the glow and the fades to black stay the same. It costs nothing
+# and it can be changed while playing, from the Debug Menu (L + R + Right), category Graficos.
+nfsmw_tratamiento_visual = "original"
 
 # --- Swap interval --------------------------------------------------------------------------------
 # Keep it at 0. The swapchain is created in IMMEDIATE mode (interval 0), which does not tear on
@@ -282,13 +289,13 @@ nfsmw_nativo_cvars_por_fotograma = true
 nfsmw_nativo_anisotropico = 0
 
 # Diagnostic: 1, 2 or 3 makes textures use a smaller mip level even up close (everything looks
-# blurry). It can be changed while playing from the settings menu (category NFSMW). Leave it at 0.
+# blurry). It can be changed while playing from the Debug Menu (category NFSMW). Leave it at 0.
 nfsmw_nativo_diag_mip_minimo = 0
 
 # Depth bias of the shadow map: removes shadow acne (the grid of dots and diagonal stripes on
 # garage doors and walls). Slope in tenths (20 = 2.0), constant in thousands of units. Both can be
-# changed while playing from the menu (L+R+Right, category NFSMW). Too high and shadows come off
-# their objects. 0 and 0 = the game's own bias.
+# changed while playing from the Debug Menu (L + R + Right, category NFSMW). Too high and shadows
+# come off their objects. 0 and 0 = the game's own bias.
 nfsmw_nativo_sombras_sesgo_pendiente = 20
 nfsmw_nativo_sombras_sesgo_constante = 0
 

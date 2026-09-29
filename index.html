@@ -68,6 +68,9 @@
     .detected .edition.good { color: var(--good); }
     .detected .edition.bad { color: var(--bad); }
     .fingerprint { font: 12px ui-monospace, monospace; color: var(--text); word-break: break-all; user-select: all; }
+    /* an edition without a build: the report that tells us what it needs, under its fingerprint */
+    .report p { margin: calc(var(--pad) * .5) 0 calc(var(--pad) * .35); color: var(--text); font-weight: 700; }
+    .report button { margin: 0; }
     progress { width: 100%; height: 12px; margin-top: calc(var(--pad) * .7); accent-color: var(--accent); }
     #log { font: 13px/1.45 ui-monospace, monospace; color: var(--muted); white-space: pre-wrap; max-height: 64px;
       overflow: auto; margin: 8px 0 0; }
@@ -154,6 +157,10 @@
         <div class="language" id="language"></div>
         <div class="edition" id="edition"></div>
         <div class="fingerprint" id="fingerprint" hidden></div>
+        <div class="report" id="reportBox" hidden>
+          <p id="reportIntro">To help us support it, create this report and send it to us with the name of your edition:</p>
+          <button id="report" data-i18n="createReport">Create nfsmw-nx-report.txt</button>
+        </div>
       </div>
     </div>
     <progress id="bar" max="1" value="0" hidden></progress>

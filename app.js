@@ -13,6 +13,9 @@ const flag = document.getElementById('flag');
 const language = document.getElementById('language');
 const edition = document.getElementById('edition');
 const fingerprint = document.getElementById('fingerprint');
+const reportBox = document.getElementById('reportBox');
+const reportIntro = document.getElementById('reportIntro');
+const report = document.getElementById('report');
 const languages = document.getElementById('languages');
 const manifest = fetch('./release/manifest.json').then((r) => r.json());
 const LANGUAGE_KEY = 'nfsmw-nx.language';
@@ -82,7 +85,9 @@ function renderChosen() {
   } else if (chosenView.count === undefined) {
     chosen.textContent = t('chosenFile', { name: chosenView.name, size: formatSize(chosenView.size) });
   } else {
-    chosen.textContent = t('chosenFolder', { name: chosenView.name, count: chosenView.count, size: formatSize(chosenView.size) });
+    // a folder with default.xex alone is enough for the report of an edition
+    chosen.textContent = t(chosenView.count === 1 ? 'chosenFolderOne' : 'chosenFolder',
+      { name: chosenView.name, count: chosenView.count, size: formatSize(chosenView.size) });
   }
 }
 
@@ -104,6 +109,9 @@ function renderDetected() {
     detected.hidden = true;
     return;
   }
+  // an edition or a disc without a build: the player can send us a report of it
+  reportBox.hidden = v.kind !== 'unsupported' && v.kind !== 'discUntested';
+  reportIntro.textContent = t(v.executableOnly ? 'reportIntroExecutable' : 'reportIntro');
   const lang = v.lang;
   switch (v.kind) {
     case 'checking':
@@ -116,7 +124,15 @@ function renderDetected() {
       showDetected('bad', languageName(lang), t('discUntested', { edition: editionName(v.edition) }), lang.svg, v.hash);
       break;
     case 'unsupported':
-      showDetected('bad', languageName(lang), t('unsupported'), lang.svg, v.hash);
+      // default.xex alone has no movies to tell its language: the box names the file instead
+      if (v.executableOnly) {
+        showDetected('bad', 'default.xex', t('unsupported'), '', v.hash);
+      } else {
+        showDetected('bad', languageName(lang), t('unsupported'), lang.svg, v.hash);
+      }
+      break;
+    case 'executableOnly':
+      showDetected('bad', 'default.xex', t('executableOnly', { edition: editionName(v.edition) }));
       break;
     case 'notComplete':
       showDetected('bad', t('notComplete'), v.code ? t(v.code) : v.message);
@@ -179,12 +195,17 @@ async function identify(files) {
   detectedView = { kind: 'checking' };
   renderDetected();
   try {
-    const game = await identifyGame(files, await manifest);
+    // default.xex alone is enough to name the edition and to make a report; the package needs the whole game
+    const game = await identifyGame(files, await manifest, { executableOnly: true });
     if (id !== check) {
       return;
     }
     const lang = describeLanguage(game.languages[0]);
-    if (game.build) {
+    if (!game.complete) {
+      detectedView = game.edition
+        ? { kind: 'executableOnly', edition: game.edition }
+        : { kind: 'unsupported', executableOnly: true, hash: game.xexHash };
+    } else if (game.build) {
       detectedView = { kind: 'supported', lang, edition: game.build.edition };
       setButtons(true);
       // the program of this edition is kept by the browser now, so the package can be made even if the
@@ -329,5 +350,57 @@ async function makePackage(onlyUpdate) {
   worker.postMessage({ ...source, lang: getLanguage(), update: onlyUpdate, port: channel.port1 }, [channel.port1]);
 }
 
+// A small text file made in the page: a link to it opens as a normal download (it never reaches the network).
+function saveText(filename, text) {
+  const url = URL.createObjectURL(new Blob([text], { type: 'text/plain' }));
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  link.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 60000);
+}
+
+// The report of an edition without a build: its fingerprints and the list of its files, saved as a text file.
+function makeReport() {
+  if (!source) {
+    return;
+  }
+  report.disabled = true;
+  bar.hidden = false;
+  bar.value = 0;
+  logBox.textContent = '';
+  log(t('logReport'));
+  const started = Date.now();
+  const worker = new Worker('./worker.js', { type: 'module' });
+  const finish = () => {
+    worker.terminate();
+    report.disabled = false;
+  };
+  worker.onmessage = ({ data }) => {
+    if (data.type === 'log') {
+      log(data.text);
+    } else if (data.type === 'progress') {
+      bar.value = data.fraction;
+    } else if (data.type === 'report') {
+      bar.value = 1;
+      saveText('nfsmw-nx-report.txt', data.text);
+      log(t('reportSaved'));
+      log(t('finished', { seconds: Math.round((Date.now() - started) / 1000) }));
+      finish();
+    } else if (data.type === 'error') {
+      log(t('error', { message: data.message }), true);
+      finish();
+    }
+  };
+  worker.onerror = (event) => {
+    log(t('error', { message: event.message }), true);
+    finish();
+  };
+  worker.postMessage({ ...source, lang: getLanguage(), report: true });
+}
+
 create.addEventListener('click', () => makePackage(false));
 update.addEventListener('click', () => makePackage(true));
+report.addEventListener('click', makeReport);
