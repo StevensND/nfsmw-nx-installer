@@ -25,7 +25,7 @@ connection.
 
 | Path | Contents |
 |---|---|
-| `index.html`, `app.js` | The page and its interface (eight languages, `lib/i18n.js`) |
+| `index.html`, `app.js` | The page and its interface (nine languages, `lib/i18n.js`) |
 | `worker.js` | Builds the package off the main thread |
 | `sw.js` | Offline cache and the download stream |
 | `lib/` | ISO and XEX readers, shader container scanner, shader library, zip writer |

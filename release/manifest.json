@@ -98,6 +98,18 @@
       "blur_container_sha256": "e80cca037bd4becd8a192daa4583e3a3a9281e06436015746583f30701a296f9"
     },
     {
+      "edition": "PAL (English)",
+      "xex_sha256": "a2dd0156c26603cf32e33b52fa906422bde74e5065da87115d5b747aa5d90ff8",
+      "disc": {
+        "NFS/ZZDATA0.BIN": 381569024
+      },
+      "nro": "nfsmw-nx-pal-pl.nro",
+      "nro_sha256": "4cf4bc0e83b0495021d4b7440c193270fe7e79c90c581f612c4598e39dffbdf1",
+      "library_sha256": "030378f052ea40404f1a1b82b098808f3b842b54d5022309357d6c6acc48643b",
+      "library_size": 3014936,
+      "blur_container_sha256": "e80cca037bd4becd8a192daa4583e3a3a9281e06436015746583f30701a296f9"
+    },
+    {
       "edition": "Japan",
       "xex_sha256": "23af89d49a713ff948af7b9bc06557b06e94e8629adc40a29513ab6f5cafb33d",
       "disc": {
