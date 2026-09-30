@@ -1,5 +1,5 @@
 import { listIsoFiles } from './lib/iso.js';
-import { identifyGame, programPath } from './lib/installer.js';
+import { identifyGame, lzxStep, programPath } from './lib/installer.js';
 import { describeLanguage, FLAGS } from './lib/flags.js';
 import { LANGUAGES, editionName, formatSize, getLanguage, languageName, preferredLanguage, setLanguage, t } from './lib/i18n.js';
 
@@ -188,6 +188,14 @@ try {
 }
 applyLanguage(preferredLanguage(saved));
 
+// The LZX step, loaded the first time an executable is not known by its file fingerprint: a known program rebuilt
+// by another tool is then recognised by its decompressed image.
+let lzxModule = null;
+async function decompressLzx(compressed, bits, size) {
+  lzxModule ??= import('./wasm/lzx.mjs').then(({ default: create }) => create({ print: () => {}, printErr: () => {} }));
+  return lzxStep(await lzxModule)(compressed, bits, size);
+}
+
 // Identifies the game as soon as it is chosen: executable fingerprint, edition and disc language.
 async function identify(files) {
   const id = ++check;
@@ -196,7 +204,7 @@ async function identify(files) {
   renderDetected();
   try {
     // default.xex alone is enough to name the edition and to make a report; the package needs the whole game
-    const game = await identifyGame(files, await manifest, { executableOnly: true });
+    const game = await identifyGame(files, await manifest, { executableOnly: true, decompressLzx });
     if (id !== check) {
       return;
     }

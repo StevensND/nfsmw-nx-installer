@@ -4,7 +4,7 @@ import createDxcModule from './wasm/dxc_web.mjs';
 import createPackModule from './wasm/pack.mjs';
 import createLzxModule from './wasm/lzx.mjs';
 import { listIsoFiles } from './lib/iso.js';
-import { createPackage, createReport, identifyGame, programPath } from './lib/installer.js';
+import { createPackage, createReport, identifyGame, lzxStep, programPath } from './lib/installer.js';
 import { editionName, setLanguage, t } from './lib/i18n.js';
 
 const log = (text) => postMessage({ type: 'log', text });
@@ -69,13 +69,15 @@ async function gameFiles(data) {
       }));
 }
 
-async function shaderModules() {
-  const quiet = () => ({ print: () => {}, printErr: () => {} });
+const quiet = () => ({ print: () => {}, printErr: () => {} });
+
+// lzx: the LZX module when it was already made (it is needed first, to identify a rebuilt executable).
+async function shaderModules(lzx = null) {
   return {
     hlsl: await createHlslModule(quiet()),
     dxc: await createDxcModule(quiet()),
     pack: await createPackModule(quiet()),
-    lzx: await createLzxModule(quiet()),
+    lzx: lzx || await createLzxModule(quiet()),
   };
 }
 
@@ -104,7 +106,8 @@ self.onmessage = async ({ data }) => {
     const files = await gameFiles(data);
     const manifest = JSON.parse(new TextDecoder().decode(await fetchBytes('./release/manifest.json')));
     // Every executable is a different program with its own Switch build: download the one of this edition.
-    const { build, edition, xexHash } = await identifyGame(files, manifest);
+    const lzx = await createLzxModule(quiet());
+    const { build, edition, xexHash } = await identifyGame(files, manifest, { decompressLzx: lzxStep(lzx) });
     if (!build) {
       throw new Error(edition
         ? t('discNotTested', { edition: editionName(edition), hash: xexHash })
@@ -122,7 +125,7 @@ self.onmessage = async ({ data }) => {
     if (nroHash !== build.nro_sha256) {
       throw new Error(t('buildMismatch', { hash: nroHash }));
     }
-    const modules = await shaderModules();
+    const modules = await shaderModules(lzx);
     const result = await createPackage(files, { manifest, nro, toml, shaderCommon }, modules, sink, log, progress,
       (size) => postMessage({ type: 'size', size }), { update: Boolean(data.update) });
     postMessage({ type: 'done', result });

@@ -10,7 +10,11 @@ computer.
 ## What it does
 
 1. Identifies the edition by the SHA-256 of `default.xex` and picks its build from `release/manifest.json`. Every
-   edition is a different program and has its own NRO.
+   edition is a different program and has its own NRO. When that fingerprint is unknown, it decompresses the
+   executable and uses the fingerprint of its image: the same program rebuilt by another tool (without encryption
+   or compression, as fan translations often do) is still recognised. Known one-word patches of fan translations
+   are put back before that fingerprint is taken, and pick the build compiled with them (the Polish translation
+   turns cutscene subtitles on this way).
 2. Downloads that NRO and checks its SHA-256.
 3. Copies the game files into the zip (first installation), or only reads them (update: program, settings and shaders).
 4. Finds the shader containers in the disc files and in the executable, translates the Xbox 360 microcode to HLSL
@@ -46,7 +50,12 @@ push to `main`; after publishing a new release, run it by hand from the Actions 
 from GitHub Actions (Settings > Pages > Source).
 
 To publish a new build, add or update its entry in `release/manifest.json`: the SHA-256 of the executable it is for,
-the NRO name and SHA-256, and the SHA-256 and size of the shader library it was tested with.
+the NRO name and SHA-256, and the SHA-256 and size of the shader library it was tested with. Then add the fingerprint
+of the decompressed image (`image_sha256`, and `patches` when the executable carries a known patch):
+
+```sh
+node test/image_fingerprints.mjs <default.xex>... --write
+```
 
 ## Testing locally
 
@@ -61,6 +70,7 @@ Then open http://127.0.0.1:8193/. The same code runs in Node:
 ```sh
 node test/package_node.mjs <extracted game folder> <output zip>
 node test/update_node.mjs <game ISO> <output zip>
+node test/rebuilt_executables_node.mjs <PAL English default.xex> <Polish default.xex> <PAL Spanish default.xex>
 ```
 
 ## License

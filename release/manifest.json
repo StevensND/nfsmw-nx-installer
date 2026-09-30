@@ -4,6 +4,7 @@
     {
       "edition": "PAL (Spanish)",
       "xex_sha256": "aad15fc218d034de3131f746e0b763dd8049a40dd676efc87667fcaf4fc72694",
+      "image_sha256": "2f21648616fa69bb3034c9213ae9e2cba48789140d3d76c129c80aca48ee7296",
       "disc": {
         "NFS/ZZDATA0.BIN": 369948672
       },
@@ -16,6 +17,7 @@
     {
       "edition": "PAL (Spanish)",
       "xex_sha256": "aad15fc218d034de3131f746e0b763dd8049a40dd676efc87667fcaf4fc72694",
+      "image_sha256": "2f21648616fa69bb3034c9213ae9e2cba48789140d3d76c129c80aca48ee7296",
       "disc": {
         "NFS/ZZDATA0.BIN": 363659264
       },
@@ -28,6 +30,7 @@
     {
       "edition": "PAL (German)",
       "xex_sha256": "23ece29d18724ea28971d52f936964d127148bd2359ff24795da7442b9069bf4",
+      "image_sha256": "0186889011c11d6d6679363ae53675d1e2e471c57d4f55bafef838ab7d6a5716",
       "disc": {
         "NFS/ZZDATA0.BIN": 375844864
       },
@@ -40,6 +43,7 @@
     {
       "edition": "PAL (Italian)",
       "xex_sha256": "acb09332bcafc15e8e21dc15062f1963804a3176fa4db48fea7f6c8afbdff066",
+      "image_sha256": "efcaf3f3e818bd1b983b1d5ceaa917aa9488734c3d804db1f79741693f6b9544",
       "disc": {
         "NFS/ZZDATA0.BIN": 369948672
       },
@@ -52,6 +56,7 @@
     {
       "edition": "PAL (French)",
       "xex_sha256": "229c5ed5dcc67871982000fb923acfd59494f21f30996b25f36b30a8d85c9b7b",
+      "image_sha256": "51066eaef17c3b214a174ccc94ea2d1eb009e569ff04f6738b6bb55ad485fc3a",
       "disc": {
         "NFS/ZZDATA0.BIN": 369948672
       },
@@ -64,6 +69,7 @@
     {
       "edition": "USA",
       "xex_sha256": "aebdf3c14d1e4e4ed2c130d94bc1a0e97bd6d5bf39bdfdef33c3909c9cc4ba4c",
+      "image_sha256": "e0002893223a1425e9cd760171921689007093b03ad3d597e156d4c15de09618",
       "disc": {
         "NFS/ZZDATA0.BIN": 381569024
       },
@@ -76,6 +82,7 @@
     {
       "edition": "PAL (English)",
       "xex_sha256": "e2ea2ff11bf84cb30430d824d7bfe699a3acf3e7400d21b9a7c938e3d7a10474",
+      "image_sha256": "027c50f93d9015f2f20683bed65b188952b49d73519e926bceb5bd220b7ab146",
       "disc": {
         "NFS/ZZDATA0.BIN": 381569024
       },
@@ -88,6 +95,7 @@
     {
       "edition": "PAL (English)",
       "xex_sha256": "e2ea2ff11bf84cb30430d824d7bfe699a3acf3e7400d21b9a7c938e3d7a10474",
+      "image_sha256": "027c50f93d9015f2f20683bed65b188952b49d73519e926bceb5bd220b7ab146",
       "disc": {
         "NFS/ZZDATA0.BIN": 387301706
       },
@@ -100,6 +108,10 @@
     {
       "edition": "PAL (English)",
       "xex_sha256": "a2dd0156c26603cf32e33b52fa906422bde74e5065da87115d5b747aa5d90ff8",
+      "image_sha256": "027c50f93d9015f2f20683bed65b188952b49d73519e926bceb5bd220b7ab146",
+      "patches": [
+        "subtitles"
+      ],
       "disc": {
         "NFS/ZZDATA0.BIN": 381569024
       },
@@ -112,6 +124,7 @@
     {
       "edition": "Japan",
       "xex_sha256": "23af89d49a713ff948af7b9bc06557b06e94e8629adc40a29513ab6f5cafb33d",
+      "image_sha256": "f1bf9ba7d9052761352315ff4a0b55087b00fb11493dab72b937df9bf8c618c0",
       "disc": {
         "NFS/ZZDATA0.BIN": 355878912
       },
