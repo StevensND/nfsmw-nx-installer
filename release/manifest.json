@@ -133,6 +133,34 @@
       "library_sha256": "07734624578e71ca62ae48692bc0a4e522373c73a79578a1c9530d3d4057c0ff",
       "library_size": 2883744,
       "blur_container_sha256": "9fff34a4ef2514a3d3e512f5f2342061090274af965bc0215e708e2e5736fc8f"
+    },
+    {
+      "edition": "Korea",
+      "language": "korean (NTSC)",
+      "xex_sha256": "47683b515e5461a2e356c45a4417f30fe69c3f6c6ea0d3352829f35f1fb33abe",
+      "image_sha256": "6a8ab7252ba63fd5c74973a682e554c7fdb087d8fbe57e65d15cc43c7cd1b340",
+      "disc": {
+        "NFS/ZZDATA0.BIN": 385439744
+      },
+      "nro": "nfsmw-nx-kor.nro",
+      "nro_sha256": "03cf23be5f6fe854759937c5fb0eb38a279673d6e5f421db5a2c29a9e8c2af9a",
+      "library_sha256": "ace7f3ee30bec39c4af18eae740da1965164309876f648adc1edfccdf2906049",
+      "library_size": 2883744,
+      "blur_container_sha256": "9fff34a4ef2514a3d3e512f5f2342061090274af965bc0215e708e2e5736fc8f"
+    },
+    {
+      "edition": "Asia",
+      "language": "tchinese (NTSC)",
+      "xex_sha256": "0cd7b9fa3957de085e298c91faa726116ad0079abaefead82c2f3337ee432e64",
+      "image_sha256": "a9c9b84974ed7f49569bfb25f6322106a9638604b6a993944e757b959cedbdd4",
+      "disc": {
+        "NFS/ZZDATA0.BIN": 384745472
+      },
+      "nro": "nfsmw-nx-cht.nro",
+      "nro_sha256": "44e1d1dcdc8f21e34d0cdd240a92029e8496869016d2554c139de7469e59e320",
+      "library_sha256": "710c68a348e6e063553251dcc1db2eefc9949cdcea265999f155752d6465a564",
+      "library_size": 2888088,
+      "blur_container_sha256": "e80cca037bd4becd8a192daa4583e3a3a9281e06436015746583f30701a296f9"
     }
   ]
 }
