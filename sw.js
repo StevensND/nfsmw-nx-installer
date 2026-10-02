@@ -37,23 +37,57 @@ const PAGE_FILES = [
 // How long a page file waits for the network before the kept copy is used (the network still refreshes it).
 const NETWORK_WAIT = 4000;
 
+// GitHub Pages sends every file with "Cache-Control: max-age=600", so a plain fetch could get a copy up to ten minutes
+// old from the browser's own cache: right after an update, a new index.html could load with an old lib/i18n.js and the
+// new languages would be missing until the cache was cleared. Page files are always checked with the server instead;
+// an unchanged file costs only a "304 Not Modified".
+function fetchFresh(url) {
+  return fetch(url, { cache: 'no-cache' });
+}
+
 const jobs = new Map();
 // Programs being downloaded into the cache, by address, so two requests for the same one share the download.
 const downloading = new Map();
 
 self.addEventListener('install', () => self.skipWaiting());
-self.addEventListener('activate', (event) =>
-  event.waitUntil(
-    (async () => {
-      for (const name of await caches.keys()) {
-        if (name !== PAGE_CACHE && name !== PROGRAM_CACHE) {
-          await caches.delete(name);
+self.addEventListener('activate', (event) => {
+  const activated = (async () => {
+    for (const name of await caches.keys()) {
+      if (name !== PAGE_CACHE && name !== PROGRAM_CACHE) {
+        await caches.delete(name);
+      }
+    }
+    await self.clients.claim();
+  })();
+  event.waitUntil(activated);
+  // only once activation is over: a page reloaded before that would wait for this worker, which waits for the page
+  activated.then(() => refreshOldPages()).catch(() => {});
+});
+
+// A page opened by an older version of this file may have been put together from old copies (that is what made new
+// languages and flags appear only after clearing the cache). Once this version takes over, every open page is asked
+// which version it is: the current page answers and reloads by itself when nothing is under way (app.js); a page
+// that does not answer is from the old code, so it is loaded again at once, now through this version.
+async function refreshOldPages() {
+  const pages = await self.clients.matchAll({ type: 'window' });
+  await Promise.all(
+    pages.map(async (page) => {
+      const answered = await new Promise((resolve) => {
+        const channel = new MessageChannel();
+        channel.port1.onmessage = () => resolve(true);
+        page.postMessage({ type: 'version' }, [channel.port2]);
+        setTimeout(() => resolve(false), 1000);
+      });
+      if (!answered) {
+        try {
+          await page.navigate(page.url);
+        } catch {
+          // a page that cannot be reloaded from here keeps working; the next visit gets the new version
         }
       }
-      await self.clients.claim();
-    })(),
-  ),
-);
+    }),
+  );
+}
 
 self.addEventListener('message', (event) => {
   const data = event.data || {};
@@ -146,7 +180,7 @@ async function fromPage(request) {
   const kept =
     (await cache.match(key)) ||
     (request.mode === 'navigate' ? await cache.match(new URL('./', self.registration.scope).href) : undefined);
-  const network = fetch(request);
+  const network = fetchFresh(request.url);
   const stored = network.then(
     (fresh) => (fresh.ok && fresh.type === 'basic' ? store(cache, key, fresh.clone(), kept) : undefined),
     () => undefined,
@@ -234,7 +268,7 @@ async function keepPage() {
         return;
       }
       try {
-        const response = await fetch(url);
+        const response = await fetchFresh(url);
         if (response.ok) {
           await cache.put(url, response);
         }

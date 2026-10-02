@@ -276,8 +276,19 @@ async function downloadHelper() {
   if (!('serviceWorker' in navigator)) {
     throw new Error('noStreaming');
   }
-  await navigator.serviceWorker.register('./sw.js');
+  // the browser checks sw.js itself with the server on every visit, not with its own cache (see fetchFresh in sw.js)
+  await navigator.serviceWorker.register('./sw.js', { updateViaCache: 'none' });
   const registration = await navigator.serviceWorker.ready;
+  if (navigator.serviceWorker.controller) {
+    // a new version of the page brings a new sw.js, which takes over this page while it is open: the files of this
+    // visit came through the old one, so the page loads again once, unless the player has already chosen a game
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (!detectedView && !reloading) {
+        reloading = true;
+        location.reload();
+      }
+    });
+  }
   if (!navigator.serviceWorker.controller) {
     const claimed = new Promise((resolve) => navigator.serviceWorker.addEventListener('controllerchange', resolve, { once: true }));
     // a forced reload (Ctrl+F5) opens the page without its service worker, which then has to take it back
@@ -287,6 +298,17 @@ async function downloadHelper() {
   // a copy of every page file, so the page can be used again without a connection
   navigator.serviceWorker.controller.postMessage({ type: 'keep-page' });
   return navigator.serviceWorker.controller;
+}
+let reloading = false;
+if ('serviceWorker' in navigator) {
+  // sw.js asks every open page which version it is when a new version takes over: this one answers, so it is not
+  // reloaded under the player (see refreshOldPages in sw.js)
+  navigator.serviceWorker.addEventListener('message', (event) => {
+    if (event.data?.type === 'version' && event.ports[0]) {
+      event.ports[0].postMessage('current');
+    }
+  });
+  navigator.serviceWorker.startMessages();
 }
 const helper = downloadHelper();
 helper.catch(() => {});
