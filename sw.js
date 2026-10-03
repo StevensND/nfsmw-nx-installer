@@ -229,7 +229,7 @@ async function fromPrograms(request) {
       // it could not be kept (no room): straight from the network
     }
   }
-  return kept || fetch(request);
+  return kept || fetch(request.url, { cache: 'no-cache' });
 }
 
 // Downloads a program into the cache, where it replaces the older versions of the same file.
@@ -240,11 +240,20 @@ function keepProgram(url) {
       if (await cache.match(url)) {
         return;
       }
-      const response = await fetch(url);
+      const response = await fetch(url, { cache: 'no-cache' });
       if (!response.ok) {
         throw new Error(`${url}: HTTP ${response.status}`);
       }
-      await cache.put(url, response);
+      // Only the version the address names is kept. Right after an update a server can still hand out the previous
+      // file; kept under the new address, that copy would be used for good and every package would fail.
+      const bytes = await response.arrayBuffer();
+      const hash = [...new Uint8Array(await crypto.subtle.digest('SHA-256', bytes))]
+        .map((b) => b.toString(16).padStart(2, '0'))
+        .join('');
+      if (hash !== new URL(url).searchParams.get('sha256')) {
+        throw new Error(`${url}: the server sent another version (${hash})`);
+      }
+      await cache.put(url, new Response(bytes, { headers: response.headers }));
       // the older versions go only once the new one is complete, so an interrupted download leaves the old one
       const file = withoutQuery(url);
       for (const old of await cache.keys()) {

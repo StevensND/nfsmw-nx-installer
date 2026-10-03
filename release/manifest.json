@@ -129,7 +129,7 @@
         "NFS/ZZDATA0.BIN": 355878912
       },
       "nro": "nfsmw-nx-jpn.nro",
-      "nro_sha256": "97f623cdb556cc751c146e95ef55751e73d93889519b3f55e5c8e064f2a5d71f",
+      "nro_sha256": "54280b41288671e238d904c889c4ff93653018916217712abfd08909923c8ca3",
       "library_sha256": "07734624578e71ca62ae48692bc0a4e522373c73a79578a1c9530d3d4057c0ff",
       "library_size": 2883744,
       "blur_container_sha256": "9fff34a4ef2514a3d3e512f5f2342061090274af965bc0215e708e2e5736fc8f"
@@ -143,7 +143,7 @@
         "NFS/ZZDATA0.BIN": 385439744
       },
       "nro": "nfsmw-nx-kor.nro",
-      "nro_sha256": "03cf23be5f6fe854759937c5fb0eb38a279673d6e5f421db5a2c29a9e8c2af9a",
+      "nro_sha256": "d39d5a026b7215b7d4c71a8efd82d81456d5277c8011bdf89bc355de34944f49",
       "library_sha256": "ace7f3ee30bec39c4af18eae740da1965164309876f648adc1edfccdf2906049",
       "library_size": 2883744,
       "blur_container_sha256": "9fff34a4ef2514a3d3e512f5f2342061090274af965bc0215e708e2e5736fc8f"
@@ -157,7 +157,7 @@
         "NFS/ZZDATA0.BIN": 384745472
       },
       "nro": "nfsmw-nx-cht.nro",
-      "nro_sha256": "44e1d1dcdc8f21e34d0cdd240a92029e8496869016d2554c139de7469e59e320",
+      "nro_sha256": "01cead851addfc9e894b420209d99fe0639019e17577305c39a79eb0e910d0f6",
       "library_sha256": "710c68a348e6e063553251dcc1db2eefc9949cdcea265999f155752d6465a564",
       "library_size": 2888088,
       "blur_container_sha256": "e80cca037bd4becd8a192daa4583e3a3a9281e06436015746583f30701a296f9"
