@@ -4,6 +4,10 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>nfsmw-nx installer</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="icons/icon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="icons/icon-16.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
   <style>
     :root { --bg: #0b0e12; --panel: rgba(16, 20, 26, .80); --inset: rgba(6, 8, 11, .82); --text: #eef1f4;
       --muted: #a9b3bd; --accent: #e8a92c; --accent-text: #15110a; --good: #57c07a; --link: #1d9bf0; --link-hover: #58b6f5; --bad: #ef6a5f;
@@ -53,6 +57,8 @@
     button:disabled { background: #2a2d36; border-color: #2a2d36; color: #7d828f; cursor: default; }
     input[type=file] { position: absolute; opacity: 0; width: 1px; height: 1px; }
     .hint { color: var(--text); margin: calc(var(--pad) * .5) 0 0; }
+    .note { color: var(--text); margin: calc(var(--pad) * .6) 0 0; padding: calc(var(--pad) * .45) calc(var(--pad) * .6);
+      background: var(--inset); border: 1px solid var(--line); border-radius: 10px; }
     .chosen { color: var(--muted); margin-top: calc(var(--pad) * .35); word-break: break-all; }
     /* step 2: when to use each button, each sentence with its button under it */
     .choices { display: grid; justify-items: start; row-gap: calc(var(--pad) * .4); }
@@ -137,6 +143,7 @@
     <label class="button" for="folder" data-i18n="formatXex">XEX format</label>
     <input id="iso" type="file" accept=".iso">
     <input id="folder" type="file" webkitdirectory>
+    <p class="note" data-i18n-html="ownCopy"><strong>Important:</strong> you need your own original copy of the game: a disc image (<code>.iso</code>) or the XEX folder dumped from your own Xbox 360 disc. The installer reads the game from it to generate the package; without it, it cannot be generated. All game files included in the package (<code>default.xex</code> and the <code>NFS</code> and <code>Movies</code> folders) come from your copy; the installer does not supply any of its own.</p>
     <p class="hint" data-i18n-html="formatHint">For the <strong>XEX format</strong>, select the folder that contains <code>default.xex</code>, the <code>Movies</code>
       folder and the <code>NFS</code> folder.</p>
     <div class="chosen" id="chosen">Nothing chosen yet.</div>

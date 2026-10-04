@@ -44,7 +44,7 @@ jobs:
       - name: Assemble the site
         run: |
           mkdir _site
-          cp -r index.html app.js worker.js sw.js background.webp shader_common.h fonts lib wasm release _site/
+          cp -r index.html app.js worker.js sw.js background.webp icons shader_common.h fonts lib wasm release _site/
 
       - uses: actions/configure-pages@v5
 
