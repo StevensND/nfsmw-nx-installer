@@ -45,15 +45,15 @@ nfsmw_nativo_texturas_mb_max = 512
 # modes. 1024x576, 640x360 and 640x480 only shrink the image after it is drawn at 1280x720, so they
 # do not raise the frame rate.
 nfsmw_resolucion_interna = "automatico"
-nfsmw_sombras_sin_vegetacion = true
-# No radial blur on the final image. With the blur and the 9-sample shadow filter, the GPU time of a
-# race frame went from 25.1 to 27.3 ms.
-nfsmw_nativo_sin_desenfoque = true
+# Shadows of trees and small objects, as on the Xbox 360 (true removes them: about 3.7 ms less GPU time).
+nfsmw_sombras_sin_vegetacion = false
+# Radial speed blur, as on the Xbox 360 (true removes it: about 0.9 ms less GPU time).
+nfsmw_nativo_sin_desenfoque = false
 nfsmw_retrovisor_recorte = true
 nfsmw_nativo_pase_area_util = true
 nfsmw_nativo_intercambiar_sin_borrado = true
 nfsmw_nativo_intercambiar_color = false
-nfsmw_nativo_pase_sombras_sin_load = true
+nfsmw_nativo_pase_sombras_sin_load = false
 nfsmw_cubemap_caras_max = 6
 nfsmw_guardia_30 = false
 nfsmw_guardia_30_presupuesto_us = 31000
@@ -62,15 +62,15 @@ nfsmw_sombras_mapas = 1
 nfsmw_sombras_cada = 1
 nfsmw_nativo_omitir_sombras = false
 nfsmw_limite_fps = "60"
-# One sample of the shadow map instead of a 3x3 filter. The 9 samples only cost GPU time: the grid
-# pattern on doors was shadow acne, which nfsmw_nativo_sombras_sesgo_pendiente removes.
-nfsmw_nativo_pcf_barato = true
+# Shadow map filter: false = the 3x3 filter of the Xbox 360 (soft edges). true = one sample, about 2 ms
+# less GPU, but shadows (trees above all) look blocky.
+nfsmw_nativo_pcf_barato = false
 nfsmw_nativo_pcf_barato_alternar_s = 0
 nfsmw_nativo_zcull = true
 nfsmw_nativo_sombras_escala = 100
 nfsmw_nativo_marcas_precisas = true
 nfsmw_renderizador = "nativo"
-nfsmw_resplandor_cielo = "natural"
+nfsmw_resplandor_cielo = "original"
 nfsmw_switch_relojes_reverse = true
 nfsmw_nativo_inv_tamano_tex_alternar_s = 0
 nfsmw_switch_nvmap_mb = 32
