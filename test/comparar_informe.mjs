@@ -5,13 +5,13 @@
 import fs from 'node:fs';
 import crypto from 'node:crypto';
 import createLzxModule from '../wasm/lzx.mjs';
-import { codeFingerprint, lzxStep } from '../lib/installer.js';
+import { codeFingerprint, lzxStep, withoutKnownPatches } from '../lib/installer.js';
 import { readXexImage } from '../lib/xex.js';
 
 const [reportPath, xexPath] = process.argv.slice(2);
 const report = fs.readFileSync(reportPath, 'utf8').split(/\r?\n/);
 const lzx = await createLzxModule({ print: () => {}, printErr: () => {} });
-const { image } = await readXexImage(new Uint8Array(fs.readFileSync(xexPath)), lzxStep(lzx));
+const image = withoutKnownPatches((await readXexImage(new Uint8Array(fs.readFileSync(xexPath)), lzxStep(lzx))).image);
 const { sections } = await codeFingerprint(image);
 const sectionAt = (at) => (sections.find((s) => at >= s.address && at < s.address + s.size) || { name: '(none)' }).name;
 // printable text share of a part: high in string tables
